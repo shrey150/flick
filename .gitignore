@@ -1,6 +1,9 @@
 # Build directory
 build
 
+# Remove DS_STORE
+.DS_Store
+
 # Prerequisites
 *.d
 
