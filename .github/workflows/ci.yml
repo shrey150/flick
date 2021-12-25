@@ -35,13 +35,14 @@ jobs:
 
     steps:
     - name: Checkout Code
-    - uses: actions/checkout@v2
-    - uses: FedericoCarboni/setup-ffmpeg@v1
+      uses: actions/checkout@v2
+
+    - name: Setup FFmpeg
+      uses: FedericoCarboni/setup-ffmpeg@v1
       with:
         # Not strictly necessary, but it may prevent rate limit
         # errors especially on GitHub-hosted macos machines.
         token: ${{ secrets.GITHUB_TOKEN }}
-        uses: actions/checkout@v2
 
     - name: Configure (${{ matrix.configuration }})
       run: cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
