@@ -7,28 +7,24 @@
 #endif
 
 #include <iostream>
-#include <stdlib.h>
 
 #include "flickConfig.h"
-#include "example.h"
+#include "ai.h"
 
-/*
- * Simple main program that demontrates how access
- * CMake definitions (here the version number) from source code.
- */
-int main() {
-  std::cout << "Flick v"
-            << PROJECT_VERSION_MAJOR
-            << "."
-            << PROJECT_VERSION_MINOR
-            << "."
-            << PROJECT_VERSION_PATCH
-            << std::endl;
+int main(int argc, char* argv[])
+{
+	// print version info
+	std::cout << "Flick v"
+		<< PROJECT_VERSION_MAJOR
+		<< "."
+		<< PROJECT_VERSION_MINOR
+		<< "."
+		<< PROJECT_VERSION_PATCH
+		<< std::endl << std::endl;
 
-  std::system("cat ../LICENSE");
+	// increment argv to skip first element (executable name);
+	// "length" must also be 1 smaller to exclude executable name
+	json j = gen_edits(++argv, argc-1);
 
-  // Bring in the dummy class from the example source,
-  // just to show that it is accessible from main.cpp.
-  Dummy d = Dummy();
-  return d.doSomething() ? 0 : -1;
+	std::cout << "Suggested edits: " << j << std::endl;
 }

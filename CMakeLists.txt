@@ -37,7 +37,8 @@ find_lto(CXX)
 #                         Locate files (change as needed).
 # --------------------------------------------------------------------------------
 set(SOURCES          # All .cpp files in src/
-    src/example.cpp
+    src/ai.cpp
+    src/edit.cpp
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/main.cpp
@@ -57,21 +58,21 @@ target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(${LIBRARY_NAME} PUBLIC doctest)
 
 # Set the compile options you want (change as needed).
-target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
+#target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
 # target_compile_options(${LIBRARY_NAME} ... )  # For setting manually.
 
 # Add an executable for the file app/main.cpp.
 # If you add more executables, copy these lines accordingly.
 add_executable(main app/main.cpp)   # Name of exec. and location of file.
 target_link_libraries(main PRIVATE ${LIBRARY_NAME})  # Link the executable to library (if it uses it).
-target_set_warnings(main ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
+#target_set_warnings(main ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
 target_enable_lto(main optimized)  # enable link-time-optimization if available for non-debug configurations
 
 # Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
 set_target_properties(
     ${LIBRARY_NAME} main
       PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 11
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS NO
 )
@@ -79,7 +80,7 @@ set_target_properties(
 # Set up tests (see tests/CMakeLists.txt).
 add_subdirectory(tests)
 
-# Add FFmpeg dependencies.
+# Find external FFmpeg libraries.
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
     libavdevice
@@ -91,4 +92,24 @@ pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
     libavutil
 )
 
+# Link FFmpeg libraries to project.
 target_link_libraries(${LIBRARY_NAME} PRIVATE PkgConfig::LIBAV)
+
+include(FetchContent)
+
+# Embed JSON library into the project.
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
+    GIT_TAG v3.10.4
+)
+
+# # Embed FFmpeg wrapper into the project.
+# FetchContent_Declare(
+#     ffmpegcpp
+#     GIT_REPOSITORY https://framagit.org/ericb/ffmpeg-cpp2
+#     GIT_TAG e7c8988f72ff161740ef9def4fc40418346dc41b
+# )
+
+FetchContent_MakeAvailable(json)# ffmpegcpp)
+target_link_libraries(${LIBRARY_NAME} PUBLIC nlohmann_json::nlohmann_json)# ffmpeg-cpp)
