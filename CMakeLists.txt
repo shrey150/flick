@@ -1,9 +1,4 @@
-# This file specifies how the project should be built, using CMake.
-# If you are unfamiliar with CMake, don't worry about all the details.
-# The sections you might want to edit are marked as such, and
-# the comments should hopefully make most of it clear.
-#
-# For many purposes, you may not need to change anything about this file.
+# This file specifies how the project should be built using CMake.
 
 cmake_minimum_required(VERSION 3.17)
 
@@ -80,21 +75,6 @@ set_target_properties(
 # Set up tests (see tests/CMakeLists.txt).
 add_subdirectory(tests)
 
-# Find external FFmpeg libraries.
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
-    libavdevice
-    libavfilter
-    libavformat
-    libavcodec
-    libswresample
-    libswscale
-    libavutil
-)
-
-# Link FFmpeg libraries to project.
-target_link_libraries(${LIBRARY_NAME} PRIVATE PkgConfig::LIBAV)
-
 include(FetchContent)
 
 # Embed JSON library into the project.
@@ -104,12 +84,36 @@ FetchContent_Declare(
     GIT_TAG v3.10.4
 )
 
-# # Embed FFmpeg wrapper into the project.
+FetchContent_MakeAvailable(json)
+target_link_libraries(${LIBRARY_NAME} PUBLIC nlohmann_json::nlohmann_json)
+
+#------------------------------------------------------------------------------------
+#    To reenable ffmpeg-cpp, add back the import, copy find_package and linking
+#    of vanilla FFmpeg libraries into ffmpeg-cpp2's CMakeLists.txt, and change
+#    Demuxer.cpp:167 to: #elif defined(__linux__) || defined(__APPLE__).
+#------------------------------------------------------------------------------------
+
+# Find external FFmpeg libraries.
+# find_package(PkgConfig REQUIRED)
+# pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
+#     libavdevice
+#     libavfilter
+#     libavformat
+#     libavcodec
+#     libswresample
+#     libswscale
+#     libavutil
+# )
+
+# Link FFmpeg libraries to project.
+# target_link_libraries(${LIBRARY_NAME} PUBLIC PkgConfig::LIBAV)
+
+# Embed FFmpeg wrapper into the project.
 # FetchContent_Declare(
 #     ffmpegcpp
 #     GIT_REPOSITORY https://framagit.org/ericb/ffmpeg-cpp2
 #     GIT_TAG e7c8988f72ff161740ef9def4fc40418346dc41b
 # )
 
-FetchContent_MakeAvailable(json)# ffmpegcpp)
-target_link_libraries(${LIBRARY_NAME} PUBLIC nlohmann_json::nlohmann_json)# ffmpeg-cpp)
+# FetchContent_MakeAvailable(ffmpegcpp)
+# target_link_libraries(${LIBRARY_NAME} PUBLIC ffmpeg-cpp)
