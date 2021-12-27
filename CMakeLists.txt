@@ -34,6 +34,8 @@ find_lto(CXX)
 set(SOURCES          # All .cpp files in src/
     src/ai.cpp
     src/edit.cpp
+    src/api.cpp
+    src/SimpleInterface.cpp
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/main.cpp
@@ -87,6 +89,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(json)
 target_link_libraries(${LIBRARY_NAME} PUBLIC nlohmann_json::nlohmann_json)
 
+# Link static libraries for ffmpeg-cpp (disabled for now, building from source instead)
+#target_link_libraries(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib/libffmpeg-cpp.a)
+
 #------------------------------------------------------------------------------------
 #    To reenable ffmpeg-cpp, add back the import, copy find_package and linking
 #    of vanilla FFmpeg libraries into ffmpeg-cpp2's CMakeLists.txt, and change
@@ -94,26 +99,26 @@ target_link_libraries(${LIBRARY_NAME} PUBLIC nlohmann_json::nlohmann_json)
 #------------------------------------------------------------------------------------
 
 # Find external FFmpeg libraries.
-# find_package(PkgConfig REQUIRED)
-# pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
-#     libavdevice
-#     libavfilter
-#     libavformat
-#     libavcodec
-#     libswresample
-#     libswscale
-#     libavutil
-# )
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
+    libavdevice
+    libavfilter
+    libavformat
+    libavcodec
+    libswresample
+    libswscale
+    libavutil
+)
 
 # Link FFmpeg libraries to project.
-# target_link_libraries(${LIBRARY_NAME} PUBLIC PkgConfig::LIBAV)
+target_link_libraries(${LIBRARY_NAME} PUBLIC PkgConfig::LIBAV)
 
 # Embed FFmpeg wrapper into the project.
-# FetchContent_Declare(
-#     ffmpegcpp
-#     GIT_REPOSITORY https://framagit.org/ericb/ffmpeg-cpp2
-#     GIT_TAG e7c8988f72ff161740ef9def4fc40418346dc41b
-# )
+FetchContent_Declare(
+    ffmpegcpp
+    GIT_REPOSITORY https://github.com/shrey150/ffmpeg-cpp
+    GIT_TAG 96b79eaade2138b4464a421917a4b129a2571a65
+)
 
-# FetchContent_MakeAvailable(ffmpegcpp)
-# target_link_libraries(${LIBRARY_NAME} PUBLIC ffmpeg-cpp)
+FetchContent_MakeAvailable(ffmpegcpp)
+target_link_libraries(${LIBRARY_NAME} PUBLIC ffmpeg-cpp)
