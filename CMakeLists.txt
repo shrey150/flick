@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.17)
 # Set project name, version and laguages here. (change as needed)
 # Version numbers are available by including "flickConfig.h" in
 # the source. See flickConfig.h.in for more details.
-project(Flick VERSION 0.0.1 LANGUAGES CXX)
+project(Flick VERSION 0.0.0 LANGUAGES CXX)
 
 # Options: Things you can set via command line options to cmake (e.g. -DENABLE_LTO=[ON|OFF])
 option(ENABLE_WARNINGS_SETTINGS "Allow target_set_warnings to add flags and defines.
@@ -32,9 +32,10 @@ find_lto(CXX)
 #                         Locate files (change as needed).
 # --------------------------------------------------------------------------------
 set(SOURCES          # All .cpp files in src/
-    src/ai.cpp
+    src/suggestions.cpp
     src/edit.cpp
     src/api.cpp
+    src/util.cpp
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/main.cpp

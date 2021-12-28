@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "flickConfig.h"
-#include "ai.h"
+#include "suggestions.h"
 
 int main(int argc, char* argv[])
 {

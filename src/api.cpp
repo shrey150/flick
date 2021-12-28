@@ -1,6 +1,3 @@
-// AniHub.LipSync.cpp : Defines the exported functions for the DLL application.
-//
-
 #include "api.h"
 
 #include <string>
@@ -17,6 +14,8 @@
 
 #include "ffmpegcpp.h"
 #include "ffmpeg.h"
+
+#include "util.h"
 
 using namespace std;
 using namespace ffmpegcpp;
@@ -107,6 +106,33 @@ void* FFmpeg::create(const char* outputFileName)
 		SetError(ctx, string("Failed to create output file " + ctx->outputFileName + ": " + string(e.what())));
 		return nullptr;
 	}
+}
+
+json FFmpeg::probe(const char* videoFileName)
+{
+	AVFormatContext* formatCtx = avformat_alloc_context();
+	avformat_open_input(&formatCtx, videoFileName, NULL, NULL);
+	avformat_find_stream_info(formatCtx, NULL);
+
+	auto videoStreamIndex = av_find_best_stream(formatCtx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
+	if (videoStreamIndex < 0){
+		throw new FFmpegException("Unable to find video stream");
+	}
+
+	auto codecCtx = formatCtx->streams[videoStreamIndex]->codecpar;
+
+	json video_info = {
+		{"name", videoFileName},
+		{"duration", (double) formatCtx->duration / AV_TIME_BASE},
+		{"width", codecCtx->width},
+		{"height", codecCtx->height},
+		{"aspect_ratio", to_aspect_ratio(codecCtx->width, codecCtx->height)}
+	};
+
+	avformat_close_input(&formatCtx);
+	avformat_free_context(formatCtx);
+
+	return video_info;
 }
 
 void FFmpeg::addVideoStream(void* handle, const char* videoFileName)

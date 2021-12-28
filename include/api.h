@@ -1,10 +1,13 @@
 #pragma once
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 class FFmpeg {
 public:
     static void* create(const char* outputFileName);
 
-    static void* probe(const char* fileName);
+    static json probe(const char* videoFileName);
 
     static void addVideoStream(void* handle, const char* videoFileName);
     static void addAudioStream(void* handle, const char* audioFileName);
