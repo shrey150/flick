@@ -35,7 +35,6 @@ set(SOURCES          # All .cpp files in src/
     src/ai.cpp
     src/edit.cpp
     src/api.cpp
-    src/SimpleInterface.cpp
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/main.cpp

@@ -1,16 +1,21 @@
 #pragma once
-#include <string>
-#include <nlohmann/json.hpp>
-
-using json = nlohmann::json;
 
 class FFmpeg {
 public:
-    /**
-     * Analyzes a video using FFprobe.
-     * 
-     * @param file the video file to analyze
-     * @return JSON output from FFprobe. 
-     */
-    static json probe(std::string file);
+    static void* create(const char* outputFileName);
+
+    static void* probe(const char* fileName);
+
+    static void addVideoStream(void* handle, const char* videoFileName);
+    static void addAudioStream(void* handle, const char* audioFileName);
+
+    static void addVideoFilter(void* handle, const char* filterString);
+    static void addAudioFilter(void* handle, const char* filterString);
+
+    static void generate(void* handle);
+
+    static bool isError(void* handle);
+    static const char* getError(void* handle);
+
+    static void close(void* handle);
 };

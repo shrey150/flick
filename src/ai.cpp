@@ -14,8 +14,13 @@ json gen_edits(char* files[], int length) {
 
     std::cout << std::endl;
 
-
-    FFmpeg::probe("/Users/shrey/Documents/Craft2\\ Rager/shrey massive fall.mp4");
+    // [TEMP] test high level FFmpeg API
+	void* handle = FFmpeg::create("out.mp4");
+	FFmpeg::addVideoStream(handle, "../tests/big_buck_bunny.mp4");
+	FFmpeg::addVideoFilter(handle, "transpose=1");
+    FFmpeg::addAudioStream(handle, "../tests/big_buck_bunny.mp4");
+	FFmpeg::generate(handle);
+	FFmpeg::close(handle);
 
     return {
         {"test", "value"}
