@@ -122,7 +122,7 @@ target_link_libraries(${LIBRARY_NAME} PRIVATE ${AVCODEC_LIBRARY} ${AVFORMAT_LIBR
 FetchContent_Declare(
     ffmpegcpp
     GIT_REPOSITORY https://github.com/shrey150/ffmpeg-cpp
-    GIT_TAG 96b79eaade2138b4464a421917a4b129a2571a65
+    GIT_TAG 745a83332f04a298d409682e83d328e0a313d316
 )
 
 FetchContent_MakeAvailable(ffmpegcpp)
