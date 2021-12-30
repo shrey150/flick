@@ -127,3 +127,10 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(ffmpegcpp)
 target_link_libraries(${LIBRARY_NAME} PUBLIC ffmpeg-cpp)
+
+# copy DLLs into build directory for Windows.
+if (WIN32)
+    add_custom_command(TARGET main POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/lib/ $<TARGET_FILE_DIR:main>)
+endif()
