@@ -36,7 +36,6 @@ set(SOURCES          # All .cpp files in src/
     src/suggestions.cpp
     src/edit.cpp
     src/api.cpp
-    src/util.cpp
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/main.cpp
@@ -80,15 +79,15 @@ add_subdirectory(tests)
 
 include(FetchContent)
 
-# Embed JSON library into the project.
-FetchContent_Declare(
-    json
-    GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
-    GIT_TAG v3.10.4
-)
+# # Embed JSON library into the project.
+# FetchContent_Declare(
+#     json
+#     GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
+#     GIT_TAG v3.10.4
+# )
 
-FetchContent_MakeAvailable(json)
-target_link_libraries(${LIBRARY_NAME} PUBLIC nlohmann_json::nlohmann_json)
+# FetchContent_MakeAvailable(json)
+# target_link_libraries(${LIBRARY_NAME} PUBLIC nlohmann_json::nlohmann_json)
 
 # Link static libraries for ffmpeg-cpp (disabled for now, building from source instead)
 #target_link_libraries(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib/libffmpeg-cpp.a)
@@ -118,15 +117,15 @@ find_library(SWSCALE_LIBRARY swscale)
 target_include_directories(${LIBRARY_NAME} PRIVATE ${AVCODEC_INCLUDE_DIR} ${AVFORMAT_INCLUDE_DIR} ${AVUTIL_INCLUDE_DIR} ${AVDEVICE_INCLUDE_DIR} ${AVFILTER_INCLUDE_DIR} ${SWRESAMPLE_INCLUDE_DIR} ${SWSCALE_INCLUDE_DIR})
 target_link_libraries(${LIBRARY_NAME} PRIVATE ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVDEVICE_LIBRARY} ${AVFILTER_LIBRARY} ${SWRESAMPLE_LIBRARY} ${SWSCALE_LIBRARY})
 
-# Embed FFmpeg wrapper into the project.
-FetchContent_Declare(
-    ffmpegcpp
-    GIT_REPOSITORY https://github.com/shrey150/ffmpeg-cpp
-    GIT_TAG 745a83332f04a298d409682e83d328e0a313d316
-)
+# # Embed FFmpeg wrapper into the project.
+# FetchContent_Declare(
+#     ffmpegcpp
+#     GIT_REPOSITORY https://github.com/shrey150/ffmpeg-cpp
+#     GIT_TAG 745a83332f04a298d409682e83d328e0a313d316
+# )
 
-FetchContent_MakeAvailable(ffmpegcpp)
-target_link_libraries(${LIBRARY_NAME} PUBLIC ffmpeg-cpp)
+# FetchContent_MakeAvailable(ffmpegcpp)
+# target_link_libraries(${LIBRARY_NAME} PUBLIC ffmpeg-cpp)
 
 # copy DLLs into build directory for Windows.
 if (WIN32)

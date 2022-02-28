@@ -1,19 +1,27 @@
 #include <string>
 #include <iostream>
+#include <vector>
 #include "suggestions.h"
 #include "api.h"
 #include "util.h"
 
-json gen_edits(char* files[], int num_files) {
+std::vector<EditInfo> gen_edits(char* files[], int num_files) {
 
-    json info = json::array();
+    std::vector<MediaInfo> info;
 
     list_files(files, num_files);
 
     // loop through each video
     for (int i = 0; i < num_files; ++i) {
-        // add each info object to JSON array
-        info.push_back(FFmpeg::probe(files[i]));
+
+        // add each info object to vector
+        try {
+            info.push_back(FFmpeg::probe(files[i]));
+        }
+        catch (...) {
+            std::cerr << "Error reading info for " << files[i] << std::endl;
+            exit(1);
+        }
     }
 
     // [TEMP] test high level FFmpeg API
@@ -24,8 +32,9 @@ json gen_edits(char* files[], int num_files) {
 	// FFmpeg::generate(handle);
 	// FFmpeg::close(handle);
 
-    std::cout << "Video info: " << info << std::endl; 
+    std::cout << "Video info: " << std::endl;
+    list_media_info(info);
 
-    // TODO change to suggested edits JSON object
-    return json::object({});
+    // TODO change to suggested edits object
+    return {};
 }

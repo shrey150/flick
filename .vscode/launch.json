@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Big Buck Bunny (macOS)",
+            "type": "lldb",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/build/main",
+            "args": ["${workspaceFolder}/tests/big_buck_bunny.mp4"],
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Big Buck Bunny (Windows)",
+            "type": "lldb",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/build/main.exe",
+            "args": ["${workspaceFolder}/tests/big_buck_bunny.mp4"],
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}"
+        },
+    ]
+}

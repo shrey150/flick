@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 
 	// increment argv to skip first element (executable name);
 	// "length" must also be 1 smaller to exclude executable name
-	json j = gen_edits(++argv, argc-1);
+	std::vector<EditInfo> edits = gen_edits(++argv, argc-1);
 
-	std::cout << "Suggested edits: " << j << std::endl;
+	std::cout << "Suggested edits: " << edits.size() << std::endl;
 }
