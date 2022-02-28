@@ -4,6 +4,12 @@
       {
         "label": "build",
         "type": "shell",
+        "windows": {
+          "command": "cd build && cmake \"MinGW Makefiles\" .. && make"
+        },
+        "osx": {
+          "command": "cd build && cmake \"Unix Makefiles\" .. && make"
+        },
         "command": "cd build && cmake .. && make",
         "group": {
           "kind": "build",
