@@ -1,5 +1,6 @@
 #pragma once
 
+// NOTE: using FFmpeg version 5
 extern "C" {
 	#include <libavcodec/avcodec.h>
 	#include <libavutil/opt.h>

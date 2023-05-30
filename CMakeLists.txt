@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.17)
 # Set project name, version and laguages here. (change as needed)
 # Version numbers are available by including "flickConfig.h" in
 # the source. See flickConfig.h.in for more details.
-project(Flick VERSION 0.0.0 LANGUAGES CXX)
+project(flick VERSION 0.0.0 LANGUAGES CXX)
 
 # Options: Things you can set via command line options to cmake (e.g. -DENABLE_LTO=[ON|OFF])
 option(ENABLE_WARNINGS_SETTINGS "Allow target_set_warnings to add flags and defines.
@@ -36,6 +36,8 @@ set(SOURCES          # All .cpp files in src/
     src/suggestions.cpp
     src/edit.cpp
     src/api.cpp
+    src/Timeline.cpp
+    src/Media.cpp
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/main.cpp
@@ -60,14 +62,14 @@ target_compile_options(${LIBRARY_NAME} PUBLIC -D__STDC_FORMAT_MACROS)
 
 # Add an executable for the file app/main.cpp.
 # If you add more executables, copy these lines accordingly.
-add_executable(main app/main.cpp)   # Name of exec. and location of file.
-target_link_libraries(main PRIVATE ${LIBRARY_NAME})  # Link the executable to library (if it uses it).
+add_executable(${PROJECT_NAME} app/main.cpp)   # Name of exec. and location of file.
+target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBRARY_NAME})  # Link the executable to library (if it uses it).
 #target_set_warnings(main ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
-target_enable_lto(main optimized)  # enable link-time-optimization if available for non-debug configurations
+target_enable_lto(${PROJECT_NAME} optimized)  # enable link-time-optimization if available for non-debug configurations
 
 # Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
 set_target_properties(
-    ${LIBRARY_NAME} main
+    ${LIBRARY_NAME} ${PROJECT_NAME}
       PROPERTIES
         CXX_STANDARD 11
         CXX_STANDARD_REQUIRED YES
@@ -92,6 +94,19 @@ include(FetchContent)
 # Link static libraries for ffmpeg-cpp (disabled for now, building from source instead)
 #target_link_libraries(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib/libffmpeg-cpp.a)
 
+# find_package(PkgConfig REQUIRED)
+# pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
+#     libavdevice
+#     libavfilter
+#     libavformat
+#     libavcodec
+#     libswresample
+#     libswscale
+#     libavutil
+# )
+
+# target_link_libraries(${LIBRARY_NAME} PUBLIC PkgConfig::LIBAV)
+
 # Find external FFmpeg libraries.
 find_path(AVCODEC_INCLUDE_DIR libavcodec/avcodec.h)
 find_library(AVCODEC_LIBRARY avcodec)
@@ -114,8 +129,8 @@ find_library(SWRESAMPLE_LIBRARY swresample)
 find_path(SWSCALE_INCLUDE_DIR libswscale/swscale.h)
 find_library(SWSCALE_LIBRARY swscale)
 
-target_include_directories(${LIBRARY_NAME} PRIVATE ${AVCODEC_INCLUDE_DIR} ${AVFORMAT_INCLUDE_DIR} ${AVUTIL_INCLUDE_DIR} ${AVDEVICE_INCLUDE_DIR} ${AVFILTER_INCLUDE_DIR} ${SWRESAMPLE_INCLUDE_DIR} ${SWSCALE_INCLUDE_DIR})
-target_link_libraries(${LIBRARY_NAME} PRIVATE ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVDEVICE_LIBRARY} ${AVFILTER_LIBRARY} ${SWRESAMPLE_LIBRARY} ${SWSCALE_LIBRARY})
+target_include_directories(${LIBRARY_NAME} PUBLIC ${AVCODEC_INCLUDE_DIR} ${AVFORMAT_INCLUDE_DIR} ${AVUTIL_INCLUDE_DIR} ${AVDEVICE_INCLUDE_DIR} ${AVFILTER_INCLUDE_DIR} ${SWRESAMPLE_INCLUDE_DIR} ${SWSCALE_INCLUDE_DIR})
+target_link_libraries(${LIBRARY_NAME} PUBLIC ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVDEVICE_LIBRARY} ${AVFILTER_LIBRARY} ${SWRESAMPLE_LIBRARY} ${SWSCALE_LIBRARY})
 
 # # Embed FFmpeg wrapper into the project.
 # FetchContent_Declare(
@@ -129,7 +144,7 @@ target_link_libraries(${LIBRARY_NAME} PRIVATE ${AVCODEC_LIBRARY} ${AVFORMAT_LIBR
 
 # copy DLLs into build directory for Windows.
 if (WIN32)
-    add_custom_command(TARGET main POST_BUILD
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-                ${CMAKE_SOURCE_DIR}/lib/ $<TARGET_FILE_DIR:main>)
+                ${CMAKE_SOURCE_DIR}/lib/ $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif()

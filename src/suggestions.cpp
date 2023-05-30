@@ -19,21 +19,14 @@ std::vector<EditInfo> gen_edits(char* files[], int num_files) {
             info.push_back(FFmpeg::probe(files[i]));
         }
         catch (...) {
-            std::cerr << "Error reading info for " << files[i] << std::endl;
+            std::cerr << "Error probing info for " << files[i] << std::endl;
             exit(1);
         }
     }
 
-    // [TEMP] test high level FFmpeg API
-	// void* handle = FFmpeg::create("out.mp4");
-	// FFmpeg::addVideoStream(handle, "../tests/big_buck_bunny.mp4");
-	// FFmpeg::addVideoFilter(handle, "transpose=1");
-    // FFmpeg::addAudioStream(handle, "../tests/big_buck_bunny.mp4");
-	// FFmpeg::generate(handle);
-	// FFmpeg::close(handle);
-
     std::cout << "Video info: " << std::endl;
     list_media_info(info);
+    std::cout << std::endl;
 
     // TODO change to suggested edits object
     return {};

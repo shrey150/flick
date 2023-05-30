@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "ffmpeg.h"
+
 /**
  * Stores information about a media file.
  */
@@ -16,6 +18,10 @@ struct MediaInfo {
     int width;
     int height;
     double aspect_ratio;
+    int format;     // AVPixelFormat (video) or AVSampleFormat (audio)
+                    // TODO assuming video for all Media objects right now
+    AVRational time_base;
+    AVRational aspect_ratio_raw;
 };
 
 /**

@@ -6,7 +6,7 @@
             "type": "lldb",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/build/main",
+            "program": "${workspaceFolder}/build/flick",
             "args": ["${workspaceFolder}/tests/big_buck_bunny.mp4"],
             "stopOnEntry": false,
             "cwd": "${workspaceFolder}"
@@ -16,9 +16,8 @@
             "type": "cppdbg",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/build/main.exe",
+            "program": "${workspaceFolder}/build/flick.exe",
             "args": ["${workspaceFolder}/tests/big_buck_bunny.mp4"],
-            "stopOnEntry": false,
             "cwd": "${workspaceFolder}"
         },
     ]

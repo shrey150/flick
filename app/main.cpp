@@ -10,9 +10,13 @@
 
 #include "flickConfig.h"
 #include "suggestions.h"
+#include "Media.h"
+#include "Timeline.h"
 
 int main(int argc, char* argv[])
 {
+	Timeline timeline;
+
 	// print version info
 	std::cout << "Flick v"
 		<< PROJECT_VERSION_MAJOR
@@ -27,4 +31,10 @@ int main(int argc, char* argv[])
 	std::vector<EditInfo> edits = gen_edits(++argv, argc-1);
 
 	std::cout << "Suggested edits: " << edits.size() << std::endl;
+
+	// TEST: add all files to timeline and export as new video
+	for (int i = 0; i < argc-1; ++i) {
+		timeline.add(Media(std::string(argv[i])));
+	}
+	timeline.export_video("test.mp4");
 }
